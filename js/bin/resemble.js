@@ -403,7 +403,6 @@ URL: https://github.com/Huddle/Resemble.js
 		function analyseImages(img1, img2, width, height){
 
 			var hiddenCanvas = document.createElement('canvas');
-
 			var data1 = img1.data;
 			var data2 = img2.data;
 

@@ -46,7 +46,7 @@ function uploadAudio() {
 function loadMusic(){
     var wavesurfer = WaveSurfer.create({
         container: '#waveform',
-        waveColor: 'violet',
+        waveColor: 'green',
         progressColor: 'red'
     });
 
@@ -56,7 +56,7 @@ function loadMusic(){
         progressColor: 'red'
     });
     wavesurfer.load(lSrc);
-    wavesurfer2.load('./audiofile/test.mp3');
+    wavesurfer2.load('./audiofile/shenhua2.mp3');
     wavesurfer.on('ready', function () {
         var canvas=$("#waveform canvas");
         src1=canvas[0].toDataURL("image/png");
@@ -83,8 +83,8 @@ function  runSorce() {
     var file_src2 = src2;
     isSrc1=false;
     isSrc2=false;
-    function onComplete(data) {
-
+    var compareNum = [];
+    function onComplete(data) {  
         var time = Date.now();
         var diffImage = new Image();
         diffImage.src = data.getImageDataUrl();
@@ -94,14 +94,57 @@ function  runSorce() {
         $(diffImage).click(function () {
             window.open(diffImage.src, '_blank');
         });
-
-        if (data.misMatchPercentage == 0) {
-            $('#diff-results').html('These images are the same!');
-        } else {
-            $('#diff-results').html('The second image is <span id="mismatch">' + data.misMatchPercentage + '</span>% different compared to the first.');
-        }
+        compareRsult(src2,0,128,0,255);
+        compareRsult(data.getImageDataUrl(),0,128,0,255);
+        
     }
+    function compareRsult(url,r,g,b,a){
+            var canvas=document.createElement('canvas');
+            var ctxt = canvas.getContext('2d');
+            var img = new Image;
+            var data; 
+            compare={
+                R:r,
+                G:g,
+                B:b,
+                A:a,
+                num:0
+            };
+            var isSucc=false;
+            img.onload = function(){
+                canvas.setAttribute("width",img.width);
+                canvas.setAttribute("height",img.height);
+                ctxt.drawImage(img, 0, 0);
+                compare.num=0;
+                data = ctxt.getImageData(0, 0, img.width, img.height).data;//读取整张图片的像素。
+                for(var i =0,len = data.length; i<len;i+=4){
+                    var red = data[i],//红色色深
+                    green = data[i+1],//绿色色深
+                    blue = data[i+2];//蓝色色深
+                    alpha=data[i+3];
+                    if(red==r&&green==g&&blue==b&&alpha==a){
+                        compare.num += 1;
+                    }
+                }
+                compareNum.push(compare.num);
+                if(compareNum.length == 2) { //数组比较
+                    if(compareNum[0]<compareNum[1]){
+                        percent=Math.ceil(compareNum[0]/compareNum[1]*10000)/100;
+                    }else{
+                        percent=Math.ceil(compareNum[1]/compareNum[0]*10000)/100;  
+                    }
+                    
+                    if (percent == 1) {
+                        $('#diff-results').html('These images are the same!');
+                    } else {
+                         $('#diff-results').html('音频相识度：<span id="mismatch">' + percent + '</span>% ');
+                    }
+                }
+            }
+            img.src = url;//src也可以是从文件选择控件中取得
+            
 
+    }
 
     (function () {
         var xhr = new XMLHttpRequest();
