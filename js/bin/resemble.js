@@ -12,7 +12,7 @@ URL: https://github.com/Huddle/Resemble.js
 		root.resemble = factory();
 	}
 }(this, function () {
-	'use strict';
+	// 'use strict';
 
 	var pixelTransparency = 1;
 
@@ -511,7 +511,7 @@ URL: https://github.com/Huddle/Resemble.js
 
 		function addLabel(text, context, hiddenCanvas){
 			var textPadding = 2;
-
+            console.log(22);
 			context.font = '12px sans-serif';
 
 			var textWidth = context.measureText(text).width + textPadding*2;
@@ -535,7 +535,6 @@ URL: https://github.com/Huddle/Resemble.js
 
 			return barHeight;
 		}
-
 		function normalise(img, w, h){
 			var c;
 			var context;
@@ -610,7 +609,6 @@ URL: https://github.com/Huddle/Resemble.js
 					return self;
 				},
 				ignoreNothing: function(){
-
 					tolerance.red = 0;
 					tolerance.green = 0;
 					tolerance.blue = 0;
@@ -701,32 +699,32 @@ URL: https://github.com/Huddle/Resemble.js
 
 	};
 
-	resemble.outputSettings = function(options){
-		var key;
-		var undefined;
+	// resemble.outputSettings = function(options){
+	// 	var key;
+	// 	var undefined;
 
-		if(options.errorColor){
-			for (key in options.errorColor) {
-				errorPixelColor[key] = options.errorColor[key] === undefined ? errorPixelColor[key] : options.errorColor[key];
-			}
-		}
+	// 	if(options.errorColor){
+	// 		for (key in options.errorColor) {
+	// 			errorPixelColor[key] = options.errorColor[key] === undefined ? errorPixelColor[key] : options.errorColor[key];
+	// 		}
+	// 	}
 
-		if(options.errorType && errorPixelTransform[options.errorType] ){
-			errorPixelTransformer = errorPixelTransform[options.errorType];
-		}
+	// 	if(options.errorType && errorPixelTransform[options.errorType] ){
+	// 		errorPixelTransformer = errorPixelTransform[options.errorType];
+	// 	}
 
-		pixelTransparency = isNaN(Number(options.transparency)) ? pixelTransparency : options.transparency;
+	// 	pixelTransparency = isNaN(Number(options.transparency)) ? pixelTransparency : options.transparency;
 
-		if (options.largeImageThreshold !== undefined) {
-			largeImageThreshold = options.largeImageThreshold;
-		}
+	// 	if (options.largeImageThreshold !== undefined) {
+	// 		largeImageThreshold = options.largeImageThreshold;
+	// 	}
 
-		if (options.useCrossOrigin !== undefined) {
-			useCrossOrigin = options.useCrossOrigin;
-		}
+	// 	if (options.useCrossOrigin !== undefined) {
+	// 		useCrossOrigin = options.useCrossOrigin;
+	// 	}
 
-		return this;
-	};
+	// 	return this;
+	// };
 
 	return resemble;
 }));

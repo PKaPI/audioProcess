@@ -2,13 +2,12 @@
     //兼容
     window.URL = window.URL || window.webkitURL;
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
     var HZRecorder = function (stream, config) {
         config = config || {};
         config.sampleBits = config.sampleBits || 8;      //采样数位 8, 16
         config.sampleRate = config.sampleRate || (44100 / 6);   //采样率(1/6 44100)
 
-        var context = new (window.webkitAudioContext || window.AudioContext)();
+        var context =new window.AudioContext();
         var audioInput = context.createMediaStreamSource(stream);
         var createScript = context.createScriptProcessor || context.createJavaScriptNode;
         var recorder = createScript.apply(context, [4096, 1, 1]);

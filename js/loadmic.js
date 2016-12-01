@@ -2,7 +2,7 @@
  * Created by pi on 2016/11/28.
  */
 var recorder;
-var audio = document.querySelector('audio');
+var audio =$('audio')[0];
 var lSrc;
 var isSrc1=false;
 var isSrc2=false;
@@ -21,6 +21,7 @@ function stopRecording() {
 function playRecording() {
     recorder.play(audio);
     lSrc=recorder.audioUrl();
+    console.log(lSrc);
     loadMusic();
 }
 
@@ -43,7 +44,7 @@ function uploadAudio() {
         }
     });
 }
-function loadMusic(){
+function loadMusic(){  //加载音乐绘制音波图形
     var wavesurfer = WaveSurfer.create({
         container: '#waveform',
         waveColor: 'green',
@@ -57,12 +58,12 @@ function loadMusic(){
     });
     wavesurfer.load(lSrc);
     wavesurfer2.load('./audiofile/shenhua2.mp3');
-    wavesurfer.on('ready', function () {
+    wavesurfer.on('ready', function () {   //监听音乐加载事件
         var canvas=$("#waveform canvas");
         src1=canvas[0].toDataURL("image/png");
         isSrc1=true;
-        if(isSrc2){
-            runSorce();
+        if(isSrc2){      
+            runSorce();  //异步函数处理
         }
     });
     wavesurfer2.on('ready', function () {
@@ -79,16 +80,16 @@ function  runSorce() {
     var file1;
     var file2;
     var resembleControl;
-    var file_src1 = src1; //可修改
-    var file_src2 = src2;
     isSrc1=false;
     isSrc2=false;
     var compareNum = [];
+    // wavesurfer2.play();
+    // wavesurfer.play();
+    resembleControl = resemble(src1).compareTo(src2).onComplete(onComplete);
     function onComplete(data) {  
         var time = Date.now();
         var diffImage = new Image();
         diffImage.src = data.getImageDataUrl();
-
         $('#image-diff').html(diffImage);
 
         $(diffImage).click(function () {
@@ -146,37 +147,37 @@ function  runSorce() {
 
     }
 
-    (function () {
-        var xhr = new XMLHttpRequest();
-        var xhr2 = new XMLHttpRequest();
-        var done = $.Deferred();
-        var dtwo = $.Deferred();
+    // (function () {
+    //     var xhr = new XMLHttpRequest();
+    //     var xhr2 = new XMLHttpRequest();
+    //     var done = $.Deferred();
+    //     var dtwo = $.Deferred();
 
-        xhr.open('GET', file_src1, true);
-        xhr.responseType = 'blob';
-        xhr.onload = function (e) {
-            done.resolve(this.response);
-        };
-        xhr.send();
+    //     xhr.open('GET', src1, true);
+    //     xhr.responseType = 'blob';
+    //     xhr.onload = function (e) {
+    //         done.resolve(this.response);
+    //     };
+    //     xhr.send();
 
-        xhr2.open('GET', file_src2, true);
-        xhr2.responseType = 'blob';
-        xhr2.onload = function (e) {
-            dtwo.resolve(this.response);
-        };
-        xhr2.send();
+    //     xhr2.open('GET', src2, true);
+    //     xhr2.responseType = 'blob';
+    //     xhr2.onload = function (e) {
+    //         dtwo.resolve(this.response);
+    //     };
+    //     xhr2.send();
 
 
 
-        $.when(done, dtwo).done(function (file, file1) {
-            if (typeof FileReader === 'undefined') {
-                resembleControl = resemble(file_src1).compareTo(file_src2).onComplete(onComplete);
-            } else {
-                resembleControl = resemble(file).compareTo(file1).onComplete(onComplete);
-            }
-        });
+    //     $.when(done, dtwo).done(function (file, file1) {
+    //         if (typeof FileReader === 'undefined') {
+    //             resembleControl = resemble(src1).compareTo(src2).onComplete(onComplete);
+    //         } else {
+    //             resembleControl = resemble(file).compareTo(file1).onComplete(onComplete);
+    //         }
+    //     });
 
-        return false;
+    //     return false;
 
-    }());
+    // }());
 }
